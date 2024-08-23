@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @SuppressWarnings({ "deprecation", "removal" })
 	protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
@@ -28,8 +27,8 @@ public class SecurityConfig {
 		return null;
 	}
 
-	@Bean
-    public PasswordEncoder passwordEncoder() {
+    @Bean
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

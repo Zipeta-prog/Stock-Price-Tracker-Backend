@@ -1,21 +1,27 @@
 package com.example.stockprice.service;
 
+import com.example.stockprice.model.Stock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-
 @Service
-public class StockService implements StockInterface {
-	@Value("${api.key}")
+public class StockService {
+
+    @Value("${alphavantage.apikey}")
     private String apiKey;
 
+    private final RestTemplate restTemplate;
+
+    public StockService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
     @Cacheable("stocks")
-    @Override
-    public String getStockPrice(String symbol) {
-        String url = "https://api.example.com/stock/" + symbol + "?apikey=" + apiKey;
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(url, String.class);
+    public Stock getStockPrice(String symbol) {
+        String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol + "&apikey=" + apiKey;
+        // Assuming the API returns a JSON structure compatible with the Stock class
+        return restTemplate.getForObject(url, Stock.class);  // Return Stock object
     }
 }
